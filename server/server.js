@@ -1,9 +1,8 @@
 require('dotenv').config()
 
-
 const CLIENT_ID = process.env.CLIENT_ID
 const CLIENT_SECRET = process.env.CLIENT_SECRET
-var REDIRECT_URI = process.env.REDIRECT_URI || 'http://localhost:5173/callback';
+var REDIRECT_URI = process.env.REDIRECT_URI || 'http://localhost:8888/callback';
 let FRONTEND_URI = process.env.FRONTEND_URI || 'http://localhost:5173';
 
 const express = require('express')
@@ -12,7 +11,8 @@ const request = require('request')
 const querystring = require('querystring')
 const cookieParser = require('cookie-parser')
 const cors = require('cors');
-const history = require('connect-history-api-fallback')
+
+const ViteExpress = require('vite-express')
 
 const generateRandomString = function(length) {
     var text = '';
@@ -28,23 +28,10 @@ const stateKey = 'spotify_auth_state';
 
 const app = express()
 
-app.use(express.static(path.resolve(__dirname, '../client')));
-
 app
   .use(express.static(path.resolve(__dirname, '../client')))
   .use(cors())
   .use(cookieParser())
-  .use(
-    history({
-      verbose: true,
-      rewrites: [
-        { from: /\/login/, to: '/login' },
-        { from: /\/callback/, to: '/callback' },
-        { from: /\/refresh_token/, to: '/refresh_token' },
-      ],
-    }),
-  )
-  .use(express.static(path.resolve(__dirname, '../client')));
 
 app.get('/', (req, res) => {
     res.render(path.resolve(__dirname, '../client/index.html'))
@@ -142,7 +129,7 @@ app.get('/login', (req, res) => {
       response.sendFile(path.resolve(__dirname, '../client', 'index.html'));
     });
 
-const port = process.env.PORT || 5173;
+const port = process.env.PORT || 8888;
 
 app.listen(port, () => {
     console.log(`Serving on port ${port}`)

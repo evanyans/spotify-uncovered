@@ -25,8 +25,6 @@ const refreshAccessToken = async () => {
 }
 
 export const getAccessToken = () => {
-    // console.log(window.location.search)
-    // console.log(new URLSearchParams(window.location.search))
     const { error, access_token, refresh_token} = getHashParams() //the url is not changing
     if (error) {
         console.log(error)
@@ -34,6 +32,7 @@ export const getAccessToken = () => {
     }
 
     if (Date.now() - getTokenDate() > 3600000) {
+        console.warn("...Refreshing access token...")
         refreshAccessToken();
     }
 
