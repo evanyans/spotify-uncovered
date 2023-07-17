@@ -11,8 +11,8 @@ const request = require('request')
 const querystring = require('querystring')
 const cookieParser = require('cookie-parser')
 const cors = require('cors');
+const history = require('connect-history-api-fallback')
 
-const ViteExpress = require('vite-express')
 
 const generateRandomString = function(length) {
     var text = '';
@@ -32,6 +32,16 @@ app
   .use(express.static(path.resolve(__dirname, '../client')))
   .use(cors())
   .use(cookieParser())
+  .use(
+    history({
+      verbose: true,
+      rewrites: [
+        { from: /\/login/, to: '/login' },
+        { from: /\/callback/, to: '/callback' },
+        { from: /\/refresh_token/, to: '/refresh_token' },
+      ],
+    }),
+  )
 
 app.get('/', (req, res) => {
     res.render(path.resolve(__dirname, '../client/index.html'))
@@ -40,7 +50,7 @@ app.get('/', (req, res) => {
 app.get('/login', (req, res) => { 
     const state = generateRandomString(16);
     res.cookie(stateKey,state);
-    const scope = 'user-read-private user-read-email user-read-recently-played user-top-read user-follow-read playlist-read-private playlist-read-collaborative';
+    const scope = 'user-read-private user-read-email user-read-recently-played user-top-read user-follow-read playlist-read-private playlist-read-collaborative playlist-modify-public';
     
     
     res.redirect(

@@ -1,5 +1,5 @@
 import Login from "./components/Login"
-import Profile from "./components/Profile";
+import Form from "./components/Form";
 import { token } from "./spotifyapi";
 import { useState, useEffect } from "react";
 
@@ -12,7 +12,10 @@ function App() {
 
   return (
     <>
-      {accessToken ? <Profile/> : <Login/>}
+      {accessToken ? 
+      <Form/> 
+      : 
+      <Login/>}
     </>
   )
 }
