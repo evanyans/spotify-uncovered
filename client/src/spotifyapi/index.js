@@ -55,4 +55,6 @@ const headers = {
     'Content-Type': 'application/json',
 }
 
-export const getUser = () => axios.get('https://api.spotify.com/v1/me', {headers})
+//export const getUser = () => axios.get('https://api.spotify.com/v1/me', {headers})
+
+export const getTopArtists = () => axios.get('https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=20', {headers})

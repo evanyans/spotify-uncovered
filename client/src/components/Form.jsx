@@ -1,25 +1,37 @@
-import styled from "styled-components"
-import { getUser } from "../spotifyapi"
-import { catchAsync } from "../utils"
-import { useEffect, useState } from "react"
-import Loader from "./Loader"
+import Button from "./Button"
+import { useMultiform } from "../hooks/useMultiform"
+import { useState } from "react"
 
-export default function Profile() {
-    const [user, setUser] = useState(null)
+import Mood from "./Mood"
+import Artists from "./Artists"
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const { data } = await getUser()
-            setUser(data)
-        }
-        catchAsync(fetchData());
-    }, [])
-    return (
-        <Wrapper>
-            {user ? user.display_name : <Loader/>}
-        </Wrapper>
-    )
+const INITIAL_DATA = {
+    mood: "",
+    artists: [""],
 }
 
-const Wrapper = styled.div`
-`
+export default function Form() {
+    const [data, setData] = useState(INITIAL_DATA)
+    const updateFields = (fields) => {
+        setData(prev => {
+            return {...prev, ...fields}
+        })
+    }
+
+    const { step, steps, currentStepIndex, back, next} = useMultiform(
+        [<Mood {...data} updateFields={updateFields}/>, <Artists {...data} updateFields={updateFields} />])
+
+    function onSubmit(e) {
+        e.preventDefault()
+        if (currentStepIndex !== 1) return next()
+        alert('success') //send data
+    }
+    return(
+        <form onSubmit={onSubmit}>
+            <div>{currentStepIndex + 1}</div>
+            {step}
+            {currentStepIndex === 0 && <Button button={true} text={"select this mood"}/>}
+            {currentStepIndex === 1 && <Button button={true} text={"select 5 artists"}/>}
+        </form>
+    )
+}
