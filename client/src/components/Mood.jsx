@@ -13,12 +13,3 @@ export default function Mood({mood, updateFields}) {
 }
 
 
-    // const [user, setUser] = useState(null)
-
-    // useEffect(() => {
-    //     const fetchData = async () => {
-    //         const { data } = await getUser()
-    //         setUser(data)
-    //     }
-    //     catchAsync(fetchData());
-    // }, [])

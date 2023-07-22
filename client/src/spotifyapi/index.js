@@ -14,7 +14,7 @@ const getTokenDate = () => window.localStorage.getItem('spotify_token_timestamp'
 
 const refreshAccessToken = async () => {
     try {
-        const { data } = await axios.get(`/refresh_token?refresh_token=${getLocalRefreshToken()}`)
+        const { data } = await axios.get(`http://localhost:8888/refresh_token?refresh_token=${getLocalRefreshToken()}`)
         const { access_token } = data
         setLocalAccessToken(access_token)
         window.location.reload()
@@ -58,3 +58,14 @@ const headers = {
 //export const getUser = () => axios.get('https://api.spotify.com/v1/me', {headers})
 
 export const getTopArtists = () => axios.get('https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=20', {headers})
+
+//export const getArtist = (id) => axios.get(`https://api.spotify.com/v1/artists/${id}`, {headers})
+
+export const getArtistAlbums = (artistId) => axios.get(`https://api.spotify.com/v1/artists/${artistId}/albums?limit=50`, {headers})
+
+export const getAlbumTracks = (albumId) => axios.get(`https://api.spotify.com/v1/albums/${albumId}/tracks?limit=50`, {headers})
+
+export const getAllArtistAlbums = (artists) => {
+    axios
+    .all(getArtistAlbums(artists[0]),getArtistAlbums(artists[1]),getArtistAlbums(artists[2]),getArtistAlbums(artists[3]),getArtistAlbums(artists[4]))
+}
