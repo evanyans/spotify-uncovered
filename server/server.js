@@ -27,7 +27,6 @@ const generateRandomString = function(length) {
 const stateKey = 'spotify_auth_state';
 
 const app = express()
-
 app
   .use(express.static(path.resolve(__dirname, '../client')))
   .use(cors())

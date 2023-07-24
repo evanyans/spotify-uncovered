@@ -61,11 +61,29 @@ export const getTopArtists = () => axios.get('https://api.spotify.com/v1/me/top/
 
 //export const getArtist = (id) => axios.get(`https://api.spotify.com/v1/artists/${id}`, {headers})
 
-export const getArtistAlbums = (artistId) => axios.get(`https://api.spotify.com/v1/artists/${artistId}/albums?limit=50`, {headers})
+export const getArtistAlbums = (artistId) => axios.get(`https://api.spotify.com/v1/artists/${artistId}/albums?limit=10`, {headers})
 
-export const getAlbumTracks = (albumId) => axios.get(`https://api.spotify.com/v1/albums/${albumId}/tracks?limit=50`, {headers})
+export const getAlbumTracks = (albumId) => axios.get(`https://api.spotify.com/v1/albums/${albumId}/tracks?limit=20`, {headers})
 
-export const getAllArtistAlbums = (artists) => {
+export const getAudio = (trackId) => axios.get(`https://api.spotify.com/v1/audio-features/${trackId}}`, {headers})
+
+export const getAllArtistAlbums = (artists) => 
     axios
-    .all(getArtistAlbums(artists[0]),getArtistAlbums(artists[1]),getArtistAlbums(artists[2]),getArtistAlbums(artists[3]),getArtistAlbums(artists[4]))
-}
+    .all(artists.map(artist => getArtistAlbums(artist)))
+    .then(
+        axios.spread((...res) => ({res}))
+    );
+    
+export const getAllTracks = (albums) =>
+    axios.all(albums.map(album => getAlbumTracks(album)))
+    .then(
+        axios.spread((...res) => ({res}))
+    );
+
+export const getAllAudio = (tracks) =>
+    axios.all(tracks.map(track => getAudio(track)))
+    .then(
+        axios.spread((...res) => ({res}))
+    );
+
+export const getMultipleAudio = (tracks) => axios.get(`https://api.spotify.com/v1/audio-features?ids=${tracks}}`, {headers})
