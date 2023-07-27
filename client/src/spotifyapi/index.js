@@ -54,7 +54,6 @@ const headers = {
     Authorization: `Bearer ${token}`,
     'Content-Type': 'application/json',
 }
-
 //export const getUser = () => axios.get('https://api.spotify.com/v1/me', {headers})
 
 export const getTopArtists = () => axios.get('https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=20', {headers})
@@ -65,7 +64,7 @@ export const getArtistAlbums = (artistId) => axios.get(`https://api.spotify.com/
 
 export const getAlbumTracks = (albumId) => axios.get(`https://api.spotify.com/v1/albums/${albumId}/tracks?limit=20`, {headers})
 
-export const getAudio = (trackId) => axios.get(`https://api.spotify.com/v1/audio-features/${trackId}}`, {headers})
+export const getAudio = (trackId) => axios.get(`https://api.spotify.com/v1/audio-features/${trackId}`, {headers})
 
 export const getAllArtistAlbums = (artists) => 
     axios
@@ -86,4 +85,10 @@ export const getAllAudio = (tracks) =>
         axios.spread((...res) => ({res}))
     );
 
-export const getMultipleAudio = (tracks) => axios.get(`https://api.spotify.com/v1/audio-features?ids=${tracks}}`, {headers})
+export const getMultipleAudio = (tracks) => axios.get(`https://api.spotify.com/v1/audio-features?ids=${tracks}`, {headers})
+
+export const getAllMultipleAudio = (trackss) =>
+    axios.all(trackss.map(tracks => getMultipleAudio(tracks)))
+    .then(
+        axios.spread((...res) => ({res}))
+    );
