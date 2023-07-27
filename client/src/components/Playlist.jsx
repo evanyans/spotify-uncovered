@@ -1,4 +1,4 @@
-import { getAllArtistAlbums, getAllTracks, getMultipleAudio, getAllAudio, getAllMultipleAudio } from "../spotifyapi"
+import { getAllArtistAlbums, getAllTracks, getMultipleAudio, getAllAudio, getAllMultipleAudio, getTracks } from "../spotifyapi"
 import { useState, useEffect } from "react"
 import { catchAsync, shuffle } from "../utils"
 import Loader from "./Loader"
@@ -84,18 +84,21 @@ export default function Playlist({data}) {
             shuffle(allData) //randomize tracks
             const result = allData.filter(data => moodFilter(mood, data))
             shuffle(result)
-            setPlaylist(result.slice(0, 20))
+            const playlist = result.slice(0,20).map(sub => sub.id)
+            const {data} = await getTracks(playlist)
+            const {tracks} = data
+            console.log(tracks)
+            setPlaylist(tracks)
         }
         catchAsync(parseData())
     }, [allData, mood])
 
-
-
-
     return(
         <>
-            {playlist ?
-            <h1>{console.log(playlist)}</h1>
+            {playlist.length >= 20 ?
+            (playlist.map(({name, artists, duration_ms}) => (
+                <p>name: {name}, by: {artists[0].name} </p>
+            )))
             :
             <Loader/>
         }

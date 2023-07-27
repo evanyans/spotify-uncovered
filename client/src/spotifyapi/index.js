@@ -60,6 +60,8 @@ export const getTopArtists = () => axios.get('https://api.spotify.com/v1/me/top/
 
 //export const getArtist = (id) => axios.get(`https://api.spotify.com/v1/artists/${id}`, {headers})
 
+export const getTracks = (trackIds) => axios.get(`https://api.spotify.com/v1/tracks?ids=${trackIds}`, {headers})
+
 export const getArtistAlbums = (artistId) => axios.get(`https://api.spotify.com/v1/artists/${artistId}/albums?limit=10`, {headers})
 
 export const getAlbumTracks = (albumId) => axios.get(`https://api.spotify.com/v1/albums/${albumId}/tracks?limit=20`, {headers})
