@@ -35,7 +35,7 @@ const StyledButton = styled.button`
     }
 `
 
-const StyledAnchor = styled.a`
+const StyledAnchor = styled.a`   
     font-size: 2em;
     font-family: 'VT323', monospace;
     text-decoration:none;

@@ -2,6 +2,10 @@ import { getAllArtistAlbums, getAllTracks, getMultipleAudio, getAllAudio, getAll
 import { useState, useEffect } from "react"
 import { catchAsync, shuffle } from "../utils"
 import Loader from "./Loader"
+import styled from "styled-components"
+import SpotifyLogo from "./SpotifyLogo"
+import { SubTitle, Title } from "./styles"
+import Button from "./Button"
 
 export default function Playlist({data}) {
     const {artists, mood} = data
@@ -92,17 +96,84 @@ export default function Playlist({data}) {
             setPlaylist(tracks)
         }
         catchAsync(parseData())
-    }, [allData, mood])
+    }, [allData, mood]) //<p>name: {name}, by: {artists[0].name} </p>
 
+    function msToMMSS(milliseconds) {
+        const totalSeconds = Math.floor(milliseconds / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      }
     return(
         <>
+        <Wrapper>
+            <SpotifyLogo/>
+            <Title>YOUR CURATED PLAYLIST</Title>
+            <SubTitle>SUCCESSFULLY IMPORTED TO YOUR SPOTIFY ACCOUNT, HAPPY LISTENING ❤️</SubTitle>
             {playlist.length >= 20 ?
-            (playlist.map(({name, artists, duration_ms}) => (
-                <p>name: {name}, by: {artists[0].name} </p>
+            (playlist.map(({name, artists, duration_ms, album, external_urls}, i) => (
+                <Song href={external_urls.spotify} target="_blank">
+                    <Image loading="lazy" src={album.images[2].url}/>
+                    <Text>
+                        <SongTitle>{name}</SongTitle>
+                        <Artists>{artists.map(sub => sub.name).join(', ')}</Artists>
+                    </Text>
+                    <Time>{msToMMSS(duration_ms)}</Time>
+                </Song>
             )))
             :
             <Loader/>
-        }
+            }
+        </Wrapper>
+        <Button button={true} text="LISTEN ON SPOTIFY" color={"#EFAFFF"}/>
         </>
     )
 }
+
+const Wrapper = styled.div`
+    display:flex;
+    flex-direction:column;
+    margin-bottom:14em;
+`
+
+const Song = styled.a`
+    display:flex;
+    align-items:center;
+    padding: 0.3em 0.5em;
+    border-radius:0.3em;
+    text-decoration:none;
+    &:hover{
+        cursor:pointer;
+        background-color: #EA97FF;
+
+    }
+`
+
+const Image = styled.img`
+
+`
+
+const Text = styled.div`
+    display:flex;
+    flex-direction:column;
+    margin-left:0.93em;
+`
+
+const SongTitle = styled.div`
+    font-size:0.8125em;
+    font-weight:400;
+    margin-bottom:0.1em;
+    color:black;
+`
+
+const Artists = styled.div`
+    font-size:0.65em;
+    font-weight:400;
+    color: #494949;
+`
+
+const Time = styled.div`
+    font-size:0.65em;
+    margin-left:auto;
+    color:black;
+`
