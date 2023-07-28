@@ -51,10 +51,9 @@ export default function Form() {
         <Playlist data={data}/>
         :
         <form onSubmit={onSubmit}>
-            <div>{currentStepIndex + 1}</div>
             {step}
             {currentStepIndex === 0 && <Button button={true} text={"select this mood"}/>}
-            {currentStepIndex === 1 && <Button button={true} text={data.artists.length > 4 ? "generate playlist": "select 5 artists"}/>}
+            {currentStepIndex === 1 && <Button button={true} text={data.artists.length > 4 ? "generate playlist": "select 5 artists"} color={"#6BFFB8"}/>}
         </form>
         
         }

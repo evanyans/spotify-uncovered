@@ -29,6 +29,11 @@ function App() {
 export default App
 
 const GlobalStyle = createGlobalStyle`
+  body{
+    transition: background-color 0.2s ease;
+    background-color:#F97C7C;
+  }
+
   p{
     font-family: 'VT323', monospace;
   }
@@ -36,10 +41,14 @@ const GlobalStyle = createGlobalStyle`
   h1{
     font-family: 'Syne', sans-serif;
   }
+
+  ::selection {
+    background: white;
+  }
 `
 
 const Wrapper = styled.div`
-  max-width:87em;
+  max-width:42em;
   margin-left:auto;
   margin-right:auto;
 `

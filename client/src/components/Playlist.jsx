@@ -38,7 +38,7 @@ export default function Playlist({data}) {
             return data.energy > 0.7
         }
         else if (mood === "chill") {
-            return data.tempo < 90 && energy < 0.5
+            return data.tempo < 90 && data.energy < 0.5
         }
 
    }
@@ -49,6 +49,7 @@ export default function Playlist({data}) {
     const [playlist, setPlaylist] = useState([])
     
     useEffect(() => {
+        document.body.style = 'background: #EFAFFF;';
         const fetchData = async () => {
             const {res} = await getAllArtistAlbums(artists)
             setAllArtistAlbums(res.map(sub => sub.data.items).map(sub => sub.map(a => a.id)).flat()) //extracts only ids
