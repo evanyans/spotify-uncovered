@@ -28,7 +28,7 @@ const stateKey = 'spotify_auth_state';
 
 const app = express()
 app
-  .use(express.static(path.resolve(__dirname, '../client')))
+  .use(express.static(path.resolve(__dirname, '../client/dist')))
   .use(cors())
   .use(cookieParser())
   .use(
@@ -135,7 +135,7 @@ app.get('/login', (req, res) => {
   
     // All remaining requests return the React app, so it can handle routing.
      app.get('*', function (request, response) {
-      response.sendFile(path.resolve(__dirname, '../client', 'index.html'));
+      response.sendFile(path.resolve(__dirname, '../client/dist', 'index.html'));
     });
 
 const port = process.env.PORT || 8888;
