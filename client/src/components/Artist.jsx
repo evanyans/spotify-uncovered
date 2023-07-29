@@ -16,7 +16,7 @@ const Wrapper = styled.div`
     transition: background-color 0.1s ease;
     background-color: ${props => (props.isActive ? '#8BCDAD' : '')};
     border-radius:0.8em;
-    border: solid 0.1em rgba(211, 220, 50, 0);
+    border: solid 1px rgba(211, 220, 50, 0);
     &:hover{
         cursor: pointer;
         border-radius:0.2em;

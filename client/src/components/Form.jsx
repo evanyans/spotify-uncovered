@@ -5,10 +5,11 @@ import { useState } from "react"
 import Mood from "./Mood"
 import Artists from "./Artists"
 import Playlist from "./Playlist"
+import styled from "styled-components"
 
 export default function Form() {
     const [data, setData] = useState({
-        mood: "",
+        mood: "happy",
         artists: [],
     })
 
@@ -46,7 +47,7 @@ export default function Form() {
         }
     }
     return(
-        <>
+        <Wrapper>
         { completedForm ?
         <Playlist data={data}/>
         :
@@ -57,6 +58,10 @@ export default function Form() {
         </form>
         
         }
-        </>
+        </Wrapper>
     )
 }
+
+const Wrapper = styled.div`
+    padding: 0em 0.5em;
+`

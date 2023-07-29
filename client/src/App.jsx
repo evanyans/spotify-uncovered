@@ -54,7 +54,7 @@ const GlobalStyle = createGlobalStyle`
 `
 
 const Wrapper = styled.div`
-  max-width:42em;
+  max-width:43em;
   margin-left:auto;
   margin-right:auto;
 `
