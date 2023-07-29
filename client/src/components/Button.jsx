@@ -1,10 +1,10 @@
 import styled from "styled-components"
 
-export default function Button ({button=false, func=()=>{}, link="https://google.com", text="Default", color="white" }) {
+export default function Button ({button=false, func=()=>{}, link="https://google.com", text="Default", color="white", targ=""}) {
     return (
         <>
             {button ? 
-            <StyledButton type="submit" onClick={func} style={{color: color}}>{text}</StyledButton>
+            <StyledButton type="submit" onClick={func} style={{color: color}} formTarget={targ}>{text}</StyledButton>
             :
             <StyledAnchor href={link} style={{color: color}}>{text}</StyledAnchor>}
         </>

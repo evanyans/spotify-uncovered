@@ -14,7 +14,7 @@ const getTokenDate = () => window.localStorage.getItem('spotify_token_timestamp'
 
 const refreshAccessToken = async () => {
     try {
-        const { data } = await axios.get(`http://localhost:8888/refresh_token?refresh_token=${getLocalRefreshToken()}`)
+        const { data } = await axios.get(`/refresh_token?refresh_token=${getLocalRefreshToken()}`) //const { data } = await axios.get(`http://localhost:8888/refresh_token?refresh_token=${getLocalRefreshToken()}`)
         const { access_token } = data
         setLocalAccessToken(access_token)
         window.location.reload()
@@ -54,7 +54,7 @@ const headers = {
     Authorization: `Bearer ${token}`,
     'Content-Type': 'application/json',
 }
-//export const getUser = () => axios.get('https://api.spotify.com/v1/me', {headers})
+export const getUser = () => axios.get('https://api.spotify.com/v1/me', {headers})
 
 export const getTopArtists = () => axios.get('https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit=20', {headers})
 
@@ -94,3 +94,19 @@ export const getAllMultipleAudio = (trackss) =>
     .then(
         axios.spread((...res) => ({res}))
     );
+
+export const createPlaylist = (userId, name) => {
+    const url = `https://api.spotify.com/v1/users/${userId}/playlists`;
+    const data = JSON.stringify({ name });
+    return axios({ method: 'post', url, headers, data });
+};
+
+export const addTracksToPlaylist = (playlistId, uris) => {
+    const url = `https://api.spotify.com/v1/playlists/${playlistId}/tracks?uris=${uris}`;
+    return axios({ method: 'post', url, headers });
+  };
+
+export const followPlaylist = playlistId => {
+    const url = `https://api.spotify.com/v1/playlists/${playlistId}/followers`;
+    return axios({ method: 'put', url, headers });
+};

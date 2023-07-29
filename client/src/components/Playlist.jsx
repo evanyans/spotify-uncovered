@@ -1,5 +1,5 @@
-import { getAllArtistAlbums, getAllTracks, getMultipleAudio, getAllAudio, getAllMultipleAudio, getTracks } from "../spotifyapi"
-import { useState, useEffect } from "react"
+import { getAllArtistAlbums, getAllTracks, getAllMultipleAudio, getTracks, getUser, createPlaylist, addTracksToPlaylist, followPlaylist} from "../spotifyapi"
+import { useState, useEffect, useMemo } from "react"
 import { catchAsync, shuffle } from "../utils"
 import Loader from "./Loader"
 import styled from "styled-components"
@@ -47,10 +47,19 @@ export default function Playlist({data}) {
 
    }
 
+    function msToMMSS(milliseconds) {
+        const totalSeconds = Math.floor(milliseconds / 1000);
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    }
     const [allArtistAlbums, setAllArtistAlbums] = useState([])
     const [allTracks, setAllTracks] = useState([])
     const [allData, setAllData] = useState([])
     const [playlist, setPlaylist] = useState([])
+    const [userId, setUserId] = useState(null)
+    const [spotifyPlaylist, setSpotifyPlaylist] = useState(null)
+    const [url, setUrl] = useState(null)
     
     useEffect(() => {
         document.body.style = 'background: #EFAFFF;';
@@ -78,7 +87,6 @@ export default function Playlist({data}) {
               );
 
             const {res} = await getAllMultipleAudio(dividedQuadrants)
-            console.log(res.map(sub => sub.data.audio_features).flat())
             setAllData(res.map(sub => sub.data.audio_features).flat())
         }
         catchAsync(fetchData())
@@ -92,18 +100,45 @@ export default function Playlist({data}) {
             const playlist = result.slice(0,20).map(sub => sub.id)
             const {data} = await getTracks(playlist)
             const {tracks} = data
-            console.log(tracks)
+            //console.log(tracks)
             setPlaylist(tracks)
         }
         catchAsync(parseData())
     }, [allData, mood]) //<p>name: {name}, by: {artists[0].name} </p>
 
-    function msToMMSS(milliseconds) {
-        const totalSeconds = Math.floor(milliseconds / 1000);
-        const minutes = Math.floor(totalSeconds / 60);
-        const seconds = totalSeconds % 60;
-        return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-      }
+    useEffect(() => {
+        const fetchUser = async() => {
+            const {data} = await getUser()
+            setUserId(data.id)
+        }
+        catchAsync(fetchUser())
+    }, [])
+
+    useEffect(() => {
+        const createList = async() => {
+            if (!userId) return
+
+            const name = `${mood} playlist`
+            const {data} = await createPlaylist(userId, name.toUpperCase())
+            setUrl(data.external_urls.spotify)
+            setSpotifyPlaylist(data.id)
+        }
+        catchAsync(createList())
+    }, [userId])
+
+    useEffect(() => {
+        const addTracks = async () => {
+            const uris = playlist.map((({uri}) => uri)).join(',')
+            const {data} = await addTracksToPlaylist(spotifyPlaylist, uris)
+            if (data) {
+                await followPlaylist(spotifyPlaylist)
+            }
+        }
+        catchAsync(addTracks())
+    }, [playlist, spotifyPlaylist])
+
+
+
     return(
         <>
         <Wrapper>
@@ -112,7 +147,7 @@ export default function Playlist({data}) {
             <SubTitle>SUCCESSFULLY IMPORTED TO YOUR SPOTIFY ACCOUNT, HAPPY LISTENING ❤️</SubTitle>
             {playlist.length >= 20 ?
             (playlist.map(({name, artists, duration_ms, album, external_urls}, i) => (
-                <Song href={external_urls.spotify} target="_blank">
+                <Song href={external_urls.spotify} target="_blank" key={i}>
                     <Image loading="lazy" src={album.images[2].url}/>
                     <Text>
                         <SongTitle>{name}</SongTitle>
@@ -125,7 +160,7 @@ export default function Playlist({data}) {
             <Loader/>
             }
         </Wrapper>
-        <Button button={true} text="LISTEN ON SPOTIFY" color={"#EFAFFF"}/>
+        {url ? <Button button={true} text="LISTEN ON SPOTIFY" color={"#EFAFFF"} func={() => (window.open(url, '_blank'))} /> : <Button button={true} text="LOADING" color={"#EFAFFF"}/> }
         </>
     )
 }
