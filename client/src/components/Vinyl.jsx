@@ -22,8 +22,11 @@ const Image = styled.img`
         to {
           transform: rotate(359deg);
         }
-      }
-`
+    }
+    @media only screen and (max-width: 600px) {
+      width:230px;
+    }
+      `
 
 const Wrapper = styled.div`
       text-align:center;
