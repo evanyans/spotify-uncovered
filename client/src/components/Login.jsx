@@ -4,7 +4,7 @@ import { SubTitle, Title } from "./styles"
 import Vinyl from "./Vinyl"
 import SpotifyLogo from "./SpotifyLogo"
 
-const AUTH_URL = process.env.NODE_ENV !== 'production' ? 'http://localhost:8888/login' : 'https://google.com'
+const AUTH_URL = process.env.NODE_ENV !== 'production' ? 'http://localhost:8888/login' : 'https://spotify-uncovered-3f538144239c.herokuapp.com/login'
 
 export default function Login() {
     return (
