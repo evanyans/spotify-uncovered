@@ -21,9 +21,7 @@ export default function Artists({artists, updateFields}) {
 
     const handleClick = (i) => {
         const updatedActivity = [...activity] //if past 5, new elements cannot be toggled
-        console.log(updatedActivity[i])
         if (updatedActivity.filter(x => x).length >= 5) {
-            console.log(updatedActivity.filter(x => x).length)
             if (updatedActivity[i]) {
                 updatedActivity[i] = !updatedActivity[i]
             }
