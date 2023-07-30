@@ -26,6 +26,11 @@ const Image = styled.img`
     @media only screen and (max-width: 600px) {
       width:230px;
     }
+    @media only screen and (max-height: 740px) {
+      width:170px;
+    }
+
+    
       `
 
 const Wrapper = styled.div`
